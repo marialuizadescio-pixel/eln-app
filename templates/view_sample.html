@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}{{ sample.name }} - ELN{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header da Amostra -->
+    <div class="mb-8">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h2 class="text-3xl font-bold">{{ sample.name }}</h2>
+                <p class="text-gray-600 mt-2">Criada em {{ sample.created_at.strftime('%d/%m/%Y às %H:%M') }}</p>
+            </div>
+            <form method="POST" action="{{ url_for('delete_sample', sample_id=sample.id) }}">
+                <button type="submit" class="btn-danger" onclick="return confirm('Deletar esta amostra e todos os seus experimentos?')">
+                    Deletar Amostra
+                </button>
+            </form>
+        </div>
+        
+        {% if sample.description %}
+            <div class="card bg-blue-50 border-blue-100">
+                <h3 class="font-semibold mb-2">Descrição</h3>
+                <p class="text-gray-700 whitespace-pre-wrap">{{ sample.description }}</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Experimentos -->
+    <div>
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold">Experimentos</h3>
+            <a href="{{ url_for('new_experiment', sample_id=sample.id) }}" class="btn-primary">+ Novo Experimento</a>
+        </div>
+
+        {% if sample.experiments %}
+            <div class="space-y-4">
+                {% for experiment in sample.experiments %}
+                    <div class="card hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h4 class="text-xl font-semibold">{{ experiment.title }}</h4>
+                                <p class="text-sm text-gray-500">{{ experiment.created_at.strftime('%d/%m/%Y às %H:%M') }}</p>
+                            </div>
+                            <form method="POST" action="{{ url_for('delete_experiment', experiment_id=experiment.id) }}">
+                                <button type="submit" class="text-red-600 hover:text-red-800" onclick="return confirm('Deletar este experimento?')">
+                                    🗑️
+                                </button>
+                            </form>
+                        </div>
+
+                        {% if experiment.description %}
+                            <div class="mb-3">
+                                <p class="text-gray-700 mb-2"><strong>Descrição:</strong></p>
+                                <p class="text-gray-600 whitespace-pre-wrap">{{ experiment.description }}</p>
+                            </div>
+                        {% endif %}
+
+                        {% if experiment.notes %}
+                            <div class="mb-3 p-3 bg-yellow-50 rounded border border-yellow-100">
+                                <p class="text-gray-700 mb-2"><strong>Anotações:</strong></p>
+                                <p class="text-gray-600 whitespace-pre-wrap">{{ experiment.notes }}</p>
+                            </div>
+                        {% endif %}
+
+                        <!-- Anexos -->
+                        {% if experiment.attachments %}
+                            <div class="mb-3">
+                                <p class="text-gray-700 mb-2"><strong>Arquivos:</strong></p>
+                                <ul class="space-y-1">
+                                    {% for attachment in experiment.attachments %}
+                                        <li class="text-sm">
+                                            📎 {{ attachment.original_filename or attachment.filename }}
+                                            <span class="text-gray-500">({{ attachment.file_type }})</span>
+                                            <span class="text-gray-400">- {{ attachment.uploaded_at.strftime('%d/%m %H:%M') }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="card text-center py-8">
+                <p class="text-gray-500 mb-4">Nenhum experimento registrado para esta amostra</p>
+                <a href="{{ url_for('new_experiment', sample_id=sample.id) }}" class="btn-primary">Registrar primeiro experimento</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
