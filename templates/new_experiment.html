@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Novo Experimento - ELN{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <h2 class="text-2xl font-bold mb-2">Novo Experimento</h2>
+    <p class="text-gray-600 mb-6">Amostra: <strong>{{ sample.name }}</strong></p>
+    
+    <div class="card">
+        <form method="POST" enctype="multipart/form-data">
+            <div class="mb-6">
+                <label for="title" class="block text-sm font-semibold mb-2">Título do Experimento *</label>
+                <input 
+                    type="text" 
+                    id="title" 
+                    name="title" 
+                    class="input-field" 
+                    placeholder="Ex: Síntese via aquecimento - Tentativa 1"
+                    required
+                >
+            </div>
+
+            <div class="mb-6">
+                <label for="description" class="block text-sm font-semibold mb-2">Descrição do Experimento</label>
+                <textarea 
+                    id="description" 
+                    name="description" 
+                    class="input-field" 
+                    rows="4"
+                    placeholder="Metodologia, temperatura, tempo, reagentes utilizados..."
+                ></textarea>
+            </div>
+
+            <div class="mb-6">
+                <label for="notes" class="block text-sm font-semibold mb-2">Anotações e Observações</label>
+                <textarea 
+                    id="notes" 
+                    name="notes" 
+                    class="input-field" 
+                    rows="4"
+                    placeholder="Observações importantes, problemas encontrados, próximos passos..."
+                ></textarea>
+            </div>
+
+            <div class="mb-6">
+                <label for="file" class="block text-sm font-semibold mb-2">Anexar Arquivo (imagem, espectro, etc.)</label>
+                <input 
+                    type="file" 
+                    id="file" 
+                    name="file" 
+                    class="input-field"
+                    accept="image/*,.pdf,.csv,.xlsx,.txt,.dat"
+                >
+                <p class="text-xs text-gray-500 mt-2">Aceita: imagens, PDF, CSV, Excel, TXT, DAT (máx 16MB)</p>
+            </div>
+
+            <div class="flex gap-4">
+                <button type="submit" class="btn-primary">Registrar Experimento</button>
+                <a href="{{ url_for('view_sample', sample_id=sample.id) }}" class="btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
