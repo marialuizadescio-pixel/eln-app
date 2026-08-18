@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Buscar - ELN{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h2 class="text-2xl font-bold mb-6">Buscar</h2>
+    
+    <!-- Form de busca -->
+    <div class="card mb-8">
+        <form method="GET" action="{{ url_for('search') }}" class="flex gap-2">
+            <input 
+                type="text" 
+                name="q" 
+                value="{{ query }}"
+                class="input-field flex-1" 
+                placeholder="Buscar por nome de amostra, experimento..."
+                autofocus
+            >
+            <button type="submit" class="btn-primary">Buscar</button>
+        </form>
+    </div>
+
+    <!-- Resultados -->
+    {% if query %}
+        {% if results.samples or results.experiments %}
+            <!-- Amostras -->
+            {% if results.samples %}
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold mb-4">Amostras ({{ results.samples|length }})</h3>
+                    <div class="space-y-3">
+                        {% for sample in results.samples %}
+                            <div class="card hover:shadow-md transition">
+                                <h4 class="text-lg font-semibold">
+                                    <a href="{{ url_for('view_sample', sample_id=sample.id) }}" class="text-blue-600 hover:underline">
+                                        {{ sample.name }}
+                                    </a>
+                                </h4>
+                                <p class="text-gray-600 text-sm mt-1">{{ sample.description or 'Sem descrição' }}</p>
+                                <p class="text-gray-500 text-xs mt-2">
+                                    {{ sample.created_at.strftime('%d/%m/%Y') }} · {{ sample.experiments|length }} experimento(s)
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Experimentos -->
+            {% if results.experiments %}
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold mb-4">Experimentos ({{ results.experiments|length }})</h3>
+                    <div class="space-y-3">
+                        {% for experiment in results.experiments %}
+                            <div class="card hover:shadow-md transition">
+                                <h4 class="text-lg font-semibold">
+                                    <a href="{{ url_for('view_sample', sample_id=experiment.sample_id) }}" class="text-blue-600 hover:underline">
+                                        {{ experiment.title }}
+                                    </a>
+                                </h4>
+                                <p class="text-gray-600 text-sm mt-1">Amostra: <strong>{{ experiment.sample.name }}</strong></p>
+                                <p class="text-gray-600 text-sm">{{ experiment.description or 'Sem descrição' }}</p>
+                                <p class="text-gray-500 text-xs mt-2">{{ experiment.created_at.strftime('%d/%m/%Y às %H:%M') }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="card text-center py-12">
+                <p class="text-gray-500 mb-4">Nenhum resultado encontrado para "<strong>{{ query }}</strong>"</p>
+                <a href="{{ url_for('search') }}" class="text-blue-600 hover:underline">Nova busca</a>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="card text-center py-12">
+            <p class="text-gray-500">Digite algo para buscar amostras e experimentos</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
