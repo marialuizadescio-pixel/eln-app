@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Nova Amostra - ELN{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <h2 class="text-2xl font-bold mb-6">Criar Nova Amostra</h2>
+    
+    <div class="card">
+        <form method="POST">
+            <div class="mb-6">
+                <label for="name" class="block text-sm font-semibold mb-2">Nome da Amostra *</label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    class="input-field" 
+                    placeholder="Ex: Amostra de Óxido de Grafeno - Lote A"
+                    required
+                >
+            </div>
+
+            <div class="mb-6">
+                <label for="description" class="block text-sm font-semibold mb-2">Descrição</label>
+                <textarea 
+                    id="description" 
+                    name="description" 
+                    class="input-field" 
+                    rows="5"
+                    placeholder="Descreva a amostra, sua origem, como foi preparada, etc."
+                ></textarea>
+            </div>
+
+            <div class="flex gap-4">
+                <button type="submit" class="btn-primary">Criar Amostra</button>
+                <a href="{{ url_for('index') }}" class="btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
