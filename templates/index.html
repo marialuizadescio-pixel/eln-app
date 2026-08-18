@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}ELN - Início{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Sidebar de atalhos -->
+    <div class="lg:col-span-1">
+        <div class="card">
+            <h2 class="text-lg font-bold mb-4">Atalhos</h2>
+            <ul class="space-y-2">
+                <li><a href="{{ url_for('new_sample') }}" class="text-blue-600 hover:underline">+ Criar nova amostra</a></li>
+                <li><a href="{{ url_for('search') }}" class="text-blue-600 hover:underline">🔍 Buscar amostra</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Lista de Amostras -->
+    <div class="lg:col-span-2">
+        <h2 class="text-2xl font-bold mb-6">Amostras</h2>
+        
+        {% if samples %}
+            <div class="space-y-4">
+                {% for sample in samples %}
+                    <div class="card hover:shadow-md transition">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <h3 class="text-xl font-semibold mb-2">
+                                    <a href="{{ url_for('view_sample', sample_id=sample.id) }}" class="text-blue-600 hover:underline">
+                                        {{ sample.name }}
+                                    </a>
+                                </h3>
+                                <p class="text-gray-600 mb-2">{{ sample.description or 'Sem descrição' }}</p>
+                                <div class="flex gap-4 text-sm text-gray-500">
+                                    <span>📅 {{ sample.created_at.strftime('%d/%m/%Y %H:%M') }}</span>
+                                    <span>🔬 {{ sample.experiments|length }} experimento(s)</span>
+                                </div>
+                            </div>
+                            <form method="POST" action="{{ url_for('delete_sample', sample_id=sample.id) }}" class="ml-4">
+                                <button type="submit" class="text-red-600 hover:text-red-800" onclick="return confirm('Tem certeza? Isso vai deletar todos os experimentos também.')">
+                                    🗑️
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="card text-center py-12">
+                <p class="text-gray-500 mb-4">Nenhuma amostra cadastrada ainda</p>
+                <a href="{{ url_for('new_sample') }}" class="btn-primary">Criar primeira amostra</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
