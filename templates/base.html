@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ELN - Electronic Lab Notebook{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f8f7f6;
+            color: #2c2c2c;
+        }
+        .eln-header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+        .btn-primary {
+            @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition;
+        }
+        .btn-secondary {
+            @apply bg-gray-300 hover:bg-gray-400 text-gray-900 font-medium py-2 px-4 rounded-lg transition;
+        }
+        .btn-danger {
+            @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition;
+        }
+        .card {
+            @apply bg-white rounded-lg shadow-sm p-6 border border-gray-100;
+        }
+        .input-field {
+            @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="eln-header text-white">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold">
+                        <a href="{{ url_for('index') }}">📔 ELN</a>
+                    </h1>
+                    <p class="text-sm text-gray-300">Electronic Lab Notebook</p>
+                </div>
+                <nav class="flex gap-4">
+                    <a href="{{ url_for('index') }}" class="hover:text-gray-200">Início</a>
+                    <a href="{{ url_for('search') }}" class="hover:text-gray-200">Buscar</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        {% if request.endpoint == 'index' %}
+            <div class="mb-6">
+                <a href="{{ url_for('new_sample') }}" class="btn-primary">+ Nova Amostra</a>
+            </div>
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 text-center py-6 mt-12">
+        <p class="text-sm">ELN v1.0 — Seu caderno de laboratório digital</p>
+    </footer>
+</body>
+</html>
